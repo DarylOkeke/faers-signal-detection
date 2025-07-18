@@ -1,5 +1,6 @@
 # Track absolutely everything under data/ in LFS
 data/**      filter=lfs diff=lfs merge=lfs -text
-
 # Also track any zip files
 *.zip        filter=lfs diff=lfs merge=lfs -text
+data/**/*.txt filter=lfs diff=lfs merge=lfs -text
+data/*.db filter=lfs diff=lfs merge=lfs -text
