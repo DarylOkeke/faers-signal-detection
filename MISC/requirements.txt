@@ -92,3 +92,224 @@ wcwidth==0.2.13
 webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==1.8.0
+
+
+
+
+
+
+
+
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "19484034",
+   "metadata": {},
+   "source": [
+    "# Setting up SQLite environment"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "12927307",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n",
+    "import pandas as pd\n",
+    "import sqlite3\n",
+    "import os\n",
+    "\n",
+    "# 1. Configuration – adjust QUARTERS if you only want one\n",
+    "DATA_DIR = '../data'\n",
+    "QUARTERS = ['24Q4', '25Q1']      # or ['25Q1'] to just load Q1 2025\n",
+    "TABLES = ['DEMO', 'DRUG', 'REAC']\n",
+    "DB_PATH = os.path.join(DATA_DIR, 'faers.db')\n",
+    "\n",
+    "# 2. Connect to your SQLite DB\n",
+    "conn = sqlite3.connect(DB_PATH)\n",
+    "\n",
+    "# 3. Loop through quarters and tables\n",
+    "for quarter in QUARTERS:\n",
+    "    year = 2000 + int(quarter[:2])        # e.g. 2000+24 = 2024\n",
+    "    period = quarter[2:]                  # 'Q4' or 'Q1'\n",
+    "    folder = f\"FAERS{period}_{year}\"      # e.g. 'FAERSQ4_2024'\n",
+    "    \n",
+    "    for tbl in TABLES:\n",
+    "        path = os.path.join(DATA_DIR, folder, 'ASCII', f\"{tbl}{quarter}.txt\")\n",
+    "        \n",
+    "        # 4. Read the raw file into pandas\n",
+    "        df = pd.read_csv(\n",
+    "            path,\n",
+    "            sep='$',\n",
+    "            encoding='latin-1',\n",
+    "            dtype=str,\n",
+    "            low_memory=False\n",
+    "        )\n",
+    "        \n",
+    "        # 5. Tag rows with their quarter\n",
+    "        df['quarter'] = quarter\n",
+    "        \n",
+    "        # 6. Write to SQLite\n",
+    "        table_name = f\"{tbl.lower()}{quarter.lower()}\" \n",
+    "        df.to_sql(table_name, conn, if_exists='replace', index=False)\n",
+    "        \n",
+    "        #print(f\"Loaded {table_name}: {df.shape[0]} rows\")\n",
+    "conn.close()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c0a70a03",
+   "metadata": {
+    "vscode": {
+     "languageId": "julia"
+    }
+   },
+   "source": [
+    "| Data Type  | Column name     | Description                                                        |\n",
+    "|---------|--------------|--------------------------------------------------------------------|\n",
+    "| DEMO    | primaryid     | Unique ID for a single report                                     |\n",
+    "| DEMO    | caseid        | Case identifier (can be shared across multiple reports)            |\n",
+    "| DEMO    | age           | Patient age                                                       |\n",
+    "| DEMO    | age_cod       | Units for age (e.g., YR, MON, DY)                                 |\n",
+    "| DEMO    | age_grp       | Age group (e.g., A, C)                                            |\n",
+    "| DEMO    | sex           | Gender (M, F, U)                                                  |\n",
+    "| DEMO    | wt            | Weight                                                            |\n",
+    "| DEMO    | wt_cod        | Units for weight (e.g., KG, LB)                                   |\n",
+    "| DEMO    | rept_dt       | Date the report was filed                                         |\n",
+    "| DEMO    | occr_country  | Country where the reaction occurred                               |\n",
+    "| DRUG    | primaryid     | Links to DEMO and REAC                                            |\n",
+    "| DRUG    | drugname      | Name of the drug reported                                         |\n",
+    "| DRUG    | role_cod      | Role of the drug (PS = primary suspect, SS = secondary suspect)   |\n",
+    "| DRUG    | route         | Route of administration (oral, intravenous, etc.)                 |\n",
+    "| DRUG    | dose_vbm      | Dose given                                                        |\n",
+    "| DRUG    | drug_seq      | Sequence of drug in multi-drug report                             |\n",
+    "| REAC    | primaryid     | Links to DEMO and REAC                                            |\n",
+    "| REAC    | pt            | Preferred Term – the actual adverse event (e.g., nausea, death)   |\n",
+    "| REAC    | outc_cod      | Outcome code (e.g., death, hospitalization)                       |"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "38d00090",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>total_reports_24q4</th>\n",
+       "      <th>total_reports_25q1</th>\n",
+       "      <th>total_demo_24q4</th>\n",
+       "      <th>total_demo_25q</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1472750</td>\n",
+       "      <td>1432926</td>\n",
+       "      <td>410849</td>\n",
+       "      <td>400514</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   total_reports_24q4  total_reports_25q1  total_demo_24q4  total_demo_25q\n",
+       "0             1472750             1432926           410849          400514"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# 7. Check data query, then test it\n",
+    "conn = sqlite3.connect(DB_PATH)\n",
+    "def sql(query):\n",
+    "    return pd.read_sql_query(query, conn)\n",
+    "\n",
+    "sql(\"\"\"\n",
+    "SELECT\n",
+    "    (SELECT COUNT(primaryid) FROM reac24q4) AS total_reports_24q4,\n",
+    "    (SELECT COUNT(primaryid) FROM reac25q1) AS total_reports_25q1,\n",
+    "    (SELECT COUNT(primaryid) FROM demo24q4) AS total_demo_24q4,\n",
+    "    (SELECT COUNT(primaryid) FROM demo25q1) AS total_demo_25q\n",
+    "\"\"\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ca21eaca",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f92f9647",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c15c62a7",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "352dd414",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.13.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
