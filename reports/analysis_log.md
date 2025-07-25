@@ -10,11 +10,15 @@
 
 - **Top‑10 AE events per drug:** Ran `queries/top_10_reported_drugs.sql` (output in `outputs/top_10_reported_drugs.md`).
   - *Key finding:* **Dupixent** topped the list for both Q4 2024 and Q1 2025 with over 35,000 reports.
+  - Looked for drugs of similar function to Dupixent to look for differences that may lead to relevant findings
+  - Came across the drug adbry, which I'll look into later
+  - Did more environment remodeling and SQL online learning to prepare for more advanced queries to be able to test my hypothesis once formulated
 
 ## 2025-07-19
 
 - **Drug background research:**
   - **Dupixent (dupilumab):** monoclonal antibody blocking IL‑4 and IL‑13 signaling, used for moderate‑to‑severe atopic dermatitis and asthma.
   - **Adbry (tralokinumab):** monoclonal antibody targeting IL‑13 only, approved for atopic dermatitis.
+  -Although they have similar function, dupixent has almost 6x more adverse event reports(see outputs/dupixent_vs_adbry.md)
 - **Analytical insight:** High report count for Dupixent may reflect its broader indication and higher prescription volume—not necessarily greater inherent risk.
 - **Next steps:** Fetch 2023 Medicare Part D prescription counts for Dupixent and Adbry, then calculate an AE rate per 1,000 prescriptions to normalize and compare safety signals.
