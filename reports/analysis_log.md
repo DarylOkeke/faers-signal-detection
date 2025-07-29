@@ -22,3 +22,26 @@
   -Although they have similar function, dupixent has almost 6x more adverse event reports(see outputs/dupixent_vs_adbry.md)
 - **Analytical insight:** High report count for Dupixent may reflect its broader indication and higher prescription volume—not necessarily greater inherent risk.
 - **Next steps:** Fetch 2023 Medicare Part D prescription counts for Dupixent and Adbry, then calculate an AE rate per 1,000 prescriptions to normalize and compare safety signals.
+
+## 2025-07-22
+
+- **Preparing normalization:**
+  - Downloaded Medicare Part D Prescriber Public Use File (PUF) for 2023 containing 26.8M prescription records
+  - Identified need to extract prescribing volume data for Dupixent and Adbry to calculate normalized adverse event rates
+  - Recognized that raw adverse event counts can be misleading without considering prescription volume differences
+
+## 2025-07-25
+
+- **Data infrastructure enhancement:**
+  - **Enhanced `load_faers_to_db.py`:** Added support for OUTC (outcomes) and INDI (indications) tables to capture complete adverse event context
+  - **Medicare integration:** Created `load_medicare_data.py` to extract and load Medicare Part D prescriber data into SQLite database
+  - **Database expansion:** Successfully loaded comprehensive dataset including:
+    - FAERS Q4 2024: 410K demographics, 2M drug records, 1.47M reactions, 309K outcomes, 1.22M indications
+    - FAERS Q1 2025: 400K demographics, 2M drug records, 1.43M reactions, 304K outcomes, 1.21M indications  
+    - Medicare 2023: 26.8M prescriber-drug records with prescription volumes and costs
+- **Normalization methodology:**
+  - **Step 1:** Extract total prescription counts for Dupixent and Adbry from Medicare Part D data (sum of `Tot_Clms` by drug)
+  - **Step 2:** Count adverse event reports for both drugs from FAERS data across both quarters
+  - **Step 3:** Calculate normalized rate = (Total AE reports / Total prescriptions) × 1,000 for rate per 1,000 prescriptions
+  - **Step 4:** Compare normalized rates to determine if Dupixent's higher absolute AE count reflects true safety signal or just prescription volume
+- **Expected outcome:** This approach will reveal whether Dupixent has inherently higher risk or simply more usage, providing clinically meaningful safety comparison 
