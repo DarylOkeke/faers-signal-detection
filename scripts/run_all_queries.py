@@ -2,7 +2,12 @@ import sqlite3
 import os
 
 # Connect to database
-db_path = os.path.join('..', 'data', 'faers.db')
+# Determine the database path relative to this file. This allows the script to
+# be executed from any working directory.
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+db_path = os.path.join(ROOT_DIR, 'data', 'faers.db')
+# SQL directory relative to the project root
+SQL_DIR = os.path.join(ROOT_DIR, 'sql_queries')
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -11,7 +16,7 @@ print("Running all queries in sequence...\n")
 # Query 1: FAERS adverse event counts
 print("1. Creating FAERS adverse event counts table...")
 try:
-    with open('../sql_queries/dupixent_vs_adbry.sql', 'r') as f:
+    with open(os.path.join(SQL_DIR, 'dupixent_vs_adbry.sql'), 'r') as f:
         query1 = f.read()
     cursor.executescript(query1)
     
@@ -32,7 +37,7 @@ except Exception as e:
 # Query 2: Medicare prescription counts  
 print("2. Creating Medicare prescription counts table...")
 try:
-    with open('../sql_queries/prescriptionct_dupixent_vs_adbry.sql', 'r') as f:
+    with open(os.path.join(SQL_DIR, 'prescriptionct_dupixent_vs_adbry.sql'), 'r') as f:
         query2 = f.read()
     cursor.executescript(query2)
     
@@ -53,7 +58,7 @@ except Exception as e:
 # Query 3: Normalized analysis
 print("3. Creating normalized adverse event analysis...")
 try:
-    with open('../sql_queries/normalized_ae_analysis.sql', 'r') as f:
+    with open(os.path.join(SQL_DIR, 'normalized_ae_analysis.sql'), 'r') as f:
         query3 = f.read()
     cursor.executescript(query3)
     

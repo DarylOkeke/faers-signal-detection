@@ -3,7 +3,10 @@ import sqlite3
 import os
 
 # Connect to database
-conn = sqlite3.connect(os.path.join('..', 'data', 'faers.db'))
+# Build path to the database relative to this file to avoid issues with the
+# current working directory when executing the script.
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+conn = sqlite3.connect(os.path.join(ROOT_DIR, 'data', 'faers.db'))
 cursor = conn.cursor()
 
 print("Searching for Dupixent/dupilumab variants...")

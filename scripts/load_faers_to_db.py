@@ -3,7 +3,10 @@ import sqlite3
 import os
 
 # 1. Configuration – adjust QUARTERS if you only want one
-DATA_DIR = '../data'
+# Compute the data directory relative to this file so the script doesn't depend
+# on where it's executed from.
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), 'data')
 QUARTERS = ['24Q4', '25Q1']      # or ['25Q1'] to just load Q1 2025
 TABLES = ['DEMO', 'DRUG', 'REAC', 'OUTC', 'INDI']
 DB_PATH = os.path.join(DATA_DIR, 'faers.db')

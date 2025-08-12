@@ -2,7 +2,10 @@ import sqlite3
 import os
 
 # Connect to the database
-db_path = os.path.join('..', 'data', 'faers.db')
+# Resolve the database path relative to this file so the script works when
+# executed from any current working directory.
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+db_path = os.path.join(ROOT_DIR, 'data', 'faers.db')
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 

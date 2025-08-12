@@ -6,7 +6,8 @@ def load_medicare_data():
     """Load Medicare Part D data into SQLite database"""
     
     # Configuration
-    DATA_DIR = '../data'
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = os.path.join(os.path.dirname(script_dir), 'data')
     DB_PATH = os.path.join(DATA_DIR, 'faers.db')
     
     # Path to the extracted Medicare data
