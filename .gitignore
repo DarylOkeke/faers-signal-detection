@@ -1,12 +1,19 @@
 # Data files - too large for git
+data/
 data/*.zip
 data/*.db
 data/FAERS*/
 data/Medicare*/
-*.csv
-*.txt
-*.pdf
-*.xlsx
+data/*.csv
+data/*.txt
+data/*.pdf
+data/*.xlsx
+
+# Database files
+*.db
+*.db-journal
+faers.db
+faers+medicare.db
 
 # Python
 __pycache__/
@@ -16,6 +23,7 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
@@ -32,3 +40,7 @@ venv.bak/
 # OS
 .DS_Store
 Thumbs.db
+
+# Project specific
+trashcan/
+

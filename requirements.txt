@@ -1,0 +1,10 @@
+# Data handling
+pandas==2.2.2
+
+# SQLite support (optional; built-in sqlite3 is included with Python)
+pysqlite3-binary==0.5.2.post3
+
+# If you want Jupyter and dev tools
+jupyterlab==4.2.5
+notebook==7.2.2
+ipython==8.27.0
