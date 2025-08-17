@@ -12,7 +12,7 @@
   - *Key finding:* **Dupixent** topped the list for both Q4 2024 and Q1 2025 with over 35,000 reports.
   - Looked for drugs of similar function to Dupixent to look for differences that may lead to relevant findings
   - Came across the drug adbry, which I'll look into later
-  - Set up development environment and studied SQL documentation to prepare for more advanced queries to test my hypothesis once formulated
+  - Set up development environment and studied more SQL for more advanced queries to test my hypothesis once formulated
 
 ## 2025-07-19
 
@@ -121,5 +121,8 @@
   * (IP)Step 5: Build event-level dataset `(PRIMARYID, INGREDIENT, REACTION_PT)` for counting and signal detection.
 * **Reflection:**
 
-  * Realized my earliest analysis (July 16–25) was based on inflated counts due to duplicates, missing suspect drug filtering, and inclusion of foreign cases.
-  * CThe new cleaned, aligned dataset will produce AE rates that are both reproducible and meaningful.
+  * Earliest analysis was based on inflated counts due to duplicates, missing suspect drug filtering, foreign cases, etc. Didn't think to clean it.
+  * The new, cleaned dataset will produce AE rates that are reproducible
+  
+  * Next up - Finish cleaning data, then will use pandas to analyze it. Not yet sure how I want to frame my hypothesis. Also I need to document the outputs from my new SQL queries
+

@@ -1,8 +1,8 @@
 # Data files - too large for git
 data/
 data/*.zip
-data/*.db
-data/FAERS*/
+#data/*.db
+#data/FAERS*/
 data/Medicare*/
 data/*.csv
 data/*.txt

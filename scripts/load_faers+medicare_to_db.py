@@ -1,4 +1,12 @@
-# optimized_faers_loader.py
+
+#IMPORTANT NOTES BEFORE RUNNING
+
+#Load FAERS Quarterly Data and Medicare Part D Yearly data.
+#Before running this script, make sure you have installed everything in the requirements.txt file.
+#Also make sure that you have downloaded the necessary data files and put them in a 'data' folder(Change DATA_DIR if needed).
+#Lastly, DO NOT CHANGE THE NAMES OF THE FAERS ASCII FILES OR THE MEDICARE CSV FILES. LEAVE THEM AS THE NAME THAT IT COMES WITH ON DOWNLOAD.
+
+
 from pathlib import Path
 import pandas as pd
 import sqlite3
@@ -6,12 +14,29 @@ import re
 import time
 
 print("Loading FAERS and Medicare data into SQLite database...")
-# ==== CONFIG YOU MAY TWEAK (minimal) ====
-DATA_DIR = Path("./data")        # point this at your repo's data folder
-DB_PATH  = Path("./faers+medicare.db")  # Changed to root directory
-TABLES   = ["DEMO", "DRUG", "REAC", "OUTC", "INDI"]  # FAERS ASCII tables to ingest
-ONLY_YEARS = None                 # e.g. {2023, 2024} to restrict; or None for all
-# ========================================
+
+# ==== CONFIG YOU MAY TWEAK ====
+
+# Path to the folder containing your FAERS and Medicare data.
+# Change this if your 'data' folder is in a different location relative to this script.
+# Example: Path("../data") if the data folder is one level up from the script.
+DATA_DIR = Path("./data")
+
+# Path (and filename) for the SQLite database that will be created or updated.
+# Change the filename if you want to keep multiple versions, or set a full path to save elsewhere.
+# Example: Path("../faers+medicare.db") to save in the parent directory of the script.
+DB_PATH  = Path("./faers+medicare.db") 
+
+TABLES   = ["DEMO", "DRUG", "REAC", "OUTC", "INDI"]     # FAERS ASCII tables to ingest
+
+ONLY_YEARS = None       # e.g. {2023, 2024} to restrict; or None for all
+
+# DO NOT CHANGE ANYTHING BELOW THIS LINE
+# UNLESS YOU FULLY UNDERSTAND THE ETL PIPELINE.
+# The functions below handle standardized column cleaning,
+# file discovery for multiple FAERS folder formats, and data loading.
+# Changing these could break reproducibility across machines.
+# ==========================================================
 
 
 def clean_cols(df: pd.DataFrame) -> pd.DataFrame:
@@ -41,14 +66,22 @@ print("Looking for FAERS ASCII files under:", DATA_DIR.resolve())
 
 def discover_faers_ascii_files(base: Path):
     """
-    Finds all FAERS ASCII files under folders like FAERSQ1_2023/ASCII/*.txt
+    Finds all FAERS ASCII files under folders like:
+    - faers_ascii_2023q1/ASCII/*.txt
+    - FAERSQ1_2023/ASCII/*.txt
     regardless of capitalization.
     """
-    for ascii_dir in base.glob("FAERSQ[1-4]_*/*ASCII*"):
-        for p in ascii_dir.glob("*.txt"):
-            parsed = parse_faers_filename(p)
-            if parsed:
-                yield (*parsed, p)
+    patterns = [
+        "**/faers_ascii_*/*ASCII*",
+        "**/FAERSQ[1-4]_*/*ASCII*"
+    ]
+    
+    for pattern in patterns:
+        for ascii_dir in base.glob(pattern):
+            for p in ascii_dir.glob("*.txt"):
+                parsed = parse_faers_filename(p)
+                if parsed:
+                    yield (*parsed, p)
 
 
 
