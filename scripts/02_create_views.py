@@ -94,7 +94,7 @@ def create_cohorts_view(conn):
           WHEN ingredient_std = 'MINOXIDIL'
                AND is_topical = 1
             THEN 'MINOXIDIL_TOPICAL'
-          WHEN ingredient_std = 'HYDRALAZINE'
+          WHEN ingredient_std LIKE '%HYDRALAZINE%'
             THEN 'HYDRALAZINE'
           ELSE 'OTHER'
         END AS cohort

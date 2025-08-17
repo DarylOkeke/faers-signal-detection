@@ -37,13 +37,14 @@ def load_summary_data(input_path):
     
     return df
 
-def filter_to_targets(df, include_topical=False):
+def filter_to_targets(df, include_topical=False, include_hydralazine=True):
     """
     Filter summary data to target cohorts and cardiac endpoints.
     
     Args:
         df: Full summary DataFrame
         include_topical: Whether to include MINOXIDIL_TOPICAL
+        include_hydralazine: Whether to include HYDRALAZINE
         
     Returns:
         pandas.DataFrame: Filtered data
@@ -52,6 +53,8 @@ def filter_to_targets(df, include_topical=False):
     target_cohorts = ['MINOXIDIL_SYSTEMIC']
     if include_topical:
         target_cohorts.append('MINOXIDIL_TOPICAL')
+    if include_hydralazine:
+        target_cohorts.append('HYDRALAZINE')
     
     # Filter to target cohorts and cardiac endpoints
     filtered_df = df[
@@ -63,13 +66,14 @@ def filter_to_targets(df, include_topical=False):
     
     return filtered_df
 
-def ensure_complete_matrix(df, include_topical=False):
+def ensure_complete_matrix(df, include_topical=False, include_hydralazine=True):
     """
     Ensure all cohort-PT combinations exist, filling missing with zeros.
     
     Args:
         df: Filtered DataFrame
         include_topical: Whether topical cohort should be included
+        include_hydralazine: Whether hydralazine cohort should be included
         
     Returns:
         pandas.DataFrame: Complete matrix with all combinations
@@ -78,6 +82,8 @@ def ensure_complete_matrix(df, include_topical=False):
     cohorts = ['MINOXIDIL_SYSTEMIC']
     if include_topical:
         cohorts.append('MINOXIDIL_TOPICAL')
+    if include_hydralazine:
+        cohorts.append('HYDRALAZINE')
     
     # Create complete index of all combinations
     complete_index = pd.MultiIndex.from_product(
@@ -265,13 +271,14 @@ def save_markdown(df, output_path):
     
     print(f"✓ Saved Markdown table to: {output_path}")
 
-def print_validation(df, include_topical=False):
+def print_validation(df, include_topical=False, include_hydralazine=True):
     """
     Print validation checks and table preview.
     
     Args:
         df: Final trimmed DataFrame
         include_topical: Whether topical was included
+        include_hydralazine: Whether hydralazine was included
     """
     print("\n" + "="*80)
     print("TRIMMED TABLE VALIDATION")
@@ -289,19 +296,22 @@ def print_validation(df, include_topical=False):
     print(f"✓ MINOXIDIL_SYSTEMIC rows: {len(systemic_rows)} (expected: 4)")
     assert len(systemic_rows) == 4, f"Expected 4 MINOXIDIL_SYSTEMIC rows, got {len(systemic_rows)}"
     
-    # Check total rows if topical included
+    # Count expected total based on included cohorts
+    expected_total = 4  # Always have MINOXIDIL_SYSTEMIC
     if include_topical:
-        expected_total = 8  # 4 systemic + 4 topical
-        print(f"✓ Total rows with topical: {len(df)} (expected: {expected_total})")
-        assert len(df) == expected_total, f"Expected {expected_total} total rows, got {len(df)}"
-        
+        expected_total += 4
         topical_rows = df[df['cohort'] == 'MINOXIDIL_TOPICAL']
         print(f"✓ MINOXIDIL_TOPICAL rows: {len(topical_rows)} (expected: 4)")
         assert len(topical_rows) == 4, f"Expected 4 MINOXIDIL_TOPICAL rows, got {len(topical_rows)}"
-    else:
-        expected_total = 4  # 4 systemic only
-        print(f"✓ Total rows without topical: {len(df)} (expected: {expected_total})")
-        assert len(df) == expected_total, f"Expected {expected_total} total rows, got {len(df)}"
+    
+    if include_hydralazine:
+        expected_total += 4
+        hydralazine_rows = df[df['cohort'] == 'HYDRALAZINE']
+        print(f"✓ HYDRALAZINE rows: {len(hydralazine_rows)} (expected: 4)")
+        assert len(hydralazine_rows) == 4, f"Expected 4 HYDRALAZINE rows, got {len(hydralazine_rows)}"
+    
+    print(f"✓ Total rows: {len(df)} (expected: {expected_total})")
+    assert len(df) == expected_total, f"Expected {expected_total} total rows, got {len(df)}"
     
     # Check PT order
     unique_pts = df['reaction_pt'].unique()
@@ -330,6 +340,8 @@ def main():
                        help='Output CSV file path')
     parser.add_argument('--include-topical', action='store_true',
                        help='Include MINOXIDIL_TOPICAL as comparator')
+    parser.add_argument('--include-hydralazine', action='store_true', default=True,
+                       help='Include HYDRALAZINE as comparator (default: True)')
     
     args = parser.parse_args()
     
@@ -339,16 +351,17 @@ def main():
     print(f"Input: {args.input_path}")
     print(f"Output: {args.output_path}")
     print(f"Include topical: {args.include_topical}")
+    print(f"Include hydralazine: {args.include_hydralazine}")
     
     try:
         # Load summary data
         df = load_summary_data(args.input_path)
         
         # Filter to target cohorts and endpoints
-        filtered_df = filter_to_targets(df, args.include_topical)
+        filtered_df = filter_to_targets(df, args.include_topical, args.include_hydralazine)
         
         # Ensure complete matrix (fill missing combinations)
-        complete_df = ensure_complete_matrix(filtered_df, args.include_topical)
+        complete_df = ensure_complete_matrix(filtered_df, args.include_topical, args.include_hydralazine)
         
         # Add decision and interpretation columns
         decision_df = add_decision_columns(complete_df)
@@ -367,7 +380,7 @@ def main():
         save_markdown(final_df, markdown_path)
         
         # Print validation
-        print_validation(final_df, args.include_topical)
+        print_validation(final_df, args.include_topical, args.include_hydralazine)
         
         print("\n" + "="*80)
         print("TRIMMED TABLE GENERATION COMPLETE")
