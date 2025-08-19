@@ -125,4 +125,144 @@
   * The new, cleaned dataset will produce AE rates that are reproducible
   
   * Next up - Finish cleaning data, then will use pandas to analyze it. Not yet sure how I want to frame my hypothesis. Also I need to document the outputs from my new SQL queries
+Here’s a continuation of your **Analysis Log**, picking up at **2025-08-15** and running daily through **2025-08-20**, covering all the work we did together (summary stats, trimming, hydralazine comparator, validation, tests, and the final Streamlit app):
+
+---
+
+
+## 2025-08-15
+
+* **Summary statistics pipeline built:**
+
+  * Implemented `compute_summary.py` to compute PRR, ROR, and chi-square using Haldane–Anscombe correction.
+  * Generated initial summary tables with cohort, reaction PT, and signal metrics.
+* **Early visualization:**
+
+  * Tested basic bar and forest plots of PRR results.
+  * Verified counts matched expectations for Minoxidil and Hydralazine cohorts.
+* **Debugging:**
+
+  * Ran into relative path issues (`outputs/results/tables/cardiac_complete.csv` not found).
+  * Fixed by restructuring outputs and confirming correct file paths.
+* **CLI troubleshooting:**
+
+  * Encountered PowerShell errors when using GNU-style CLI flags (`--input`); switched to `argparse` in Python for portability.
+
+---
+
+## 2025-08-16
+
+* **Validation and controls:**
+
+  * Added **positive control**: Ciprofloxacin → Tendon rupture (expected strong signal).
+  * Added **negative control**: Metformin → Alopecia (expected no signal, PRR ≈ 1).
+  * Created `test_methods.py` to automatically validate control signals against known outcomes.
+* **Bug fixes:**
+
+  * Resolved `global` variable misuse in tests by restructuring test scope.
+* **Cohort trimming:**
+
+  * Built `make_trimmed_tables.py`:
+
+    * Filters to **cardiac endpoints** (tamponade, effusion, pericarditis).
+    * Optionally includes topical Minoxidil and Hydralazine comparators.
+    * Guarantees complete cohort–PT matrix, even for zero-counts.
+  * Outputs both **CSV** and **Markdown** tables with human-readable interpretations.
+* **Results validation:**
+
+  * Confirmed systemic Minoxidil rows present (4 PTs).
+  * Hydralazine included as comparator (also 4 PTs).
+  * Verified flagged signals align with known pharmacology.
+
+---
+
+## 2025-08-17
+
+* **Repository restructuring:**
+
+  * Finalized repo layout for clarity and reproducibility:
+
+    * `data/` → raw FAERS/Medicare inputs + SQLite database.
+    * `scripts/` → ingestion + plotting utilities.
+    * `src/` → core analysis modules (`compute_summary.py`, `make_trimmed_tables.py`).
+    * `outputs/` → results tables + figures.
+    * `tests/` → control validations (`test_prr_math.py`, `test_methods.py`).
+    * `app/` → Streamlit front-end (`app.py`).
+* **Refinement of trimmed tables:**
+
+  * Added interpretation text (Reject H0 vs Fail to reject H0).
+  * Automated validation checks (row counts, cohort completeness, PT order).
+* **First visual outputs:**
+
+  * Generated publication-ready bar and forest plots from `create_forest_plot.py`.
+  * Verified Minoxidil systemic showed disproportionate reporting for effusions.
+
+---
+
+## 2025-08-18
+
+* **Streamlit app development (v1):**
+
+  * Initial `app.py` to:
+
+    * Connect to SQLite DB.
+    * Allow cohort/PT selection.
+    * Compute PRR, ROR, chi² dynamically.
+    * Display results in interactive dataframe with CSV download.
+  * Added quick forest plot for PRR signals.
+* **Bug fix:**
+
+  * Resolved Matplotlib color error (`list of colors` invalid) by assigning a **single hex color per cohort** instead of per list.
+* **Extended flexibility:**
+
+  * Enabled dropdown to pick **any cohort in the database**, not just pre-tested ones.
+  * Defaulted to cardiac endpoints at top of PT list for demo purposes.
+
+---
+
+## 2025-08-19
+
+* **Streamlit app upgrade (v2):**
+
+  * Added **two-page navigation**:
+
+    * *Cohort / Endpoint Analysis* → interactive filters, tables, forest plots.
+    * *All Cohorts Overview* → cohort sizes, top flagged signals globally.
+  * Integrated proper download buttons for both results and cohort size tables.
+  * Introduced cleaner validation thresholds (PRR ≥ 2.0, χ² ≥ 4.0, N ≥ 3).
+* **UI polish:**
+
+  * Used `tab20` color palette for consistent cohort coloring.
+  * Added legends for cohorts in plots.
+  * Applied log-scale to PRR forest plots with reference lines at PRR=1 and PRR threshold.
+
+---
+
+## 2025-08-20
+
+* **Finalization:**
+
+  * Completed Streamlit app as **drop-in tool**:
+
+    * Any cohort + PTs from database.
+    * Cohort size summary page.
+    * Control thresholds configurable by user.
+    * Publication-ready forest plots + case count bar charts.
+  * Repo now has:
+
+    * **End-to-end reproducibility:** raw data → database → analysis → tables/plots → interactive app.
+    * **Testing suite with controls** ensuring signal detection validity.
+* **Reflection:**
+
+  * Project matured from raw SQL exploration (Dupixent vs Adbry) to a robust FAERS-Medicare signal detection pipeline.
+  * Built with reproducibility, flexibility, and presentation in mind.
+  * The final Streamlit app demonstrates the whole workflow — accessible to both technical reviewers and domain experts.
+
+---
+
+✅ **Project milestone reached:** Analysis pipeline complete, validated, visualized, and wrapped in a working Streamlit application.
+
+---
+
+Do you want me to also generate a **final repo README.md** summarizing the whole project (pipeline steps + app usage), so it’s ready for GitHub?
 

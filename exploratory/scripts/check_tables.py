@@ -24,32 +24,32 @@ conn.close()
 # If terminal says "Available tables: ", and nothing is listed, then check if it was loaded to the correct area.
 # This is what you should see in terminal after first loading up the database:
 # Available tables:
-# - faers_demo_2023q1
-# - faers_demo_2023q2
-# - faers_demo_2023q3
-# - faers_demo_2023q4
-# - faers_drug_2023q1
-# - faers_drug_2023q2
-# - faers_drug_2023q3
-# - faers_drug_2023q4
-# - faers_indi_2023q1
-# - faers_indi_2023q2
-# - faers_indi_2023q3
-# - faers_indi_2023q4
-# - faers_outc_2023q1
-# - faers_outc_2023q2
-# - faers_outc_2023q3
-# - faers_outc_2023q4
-# - faers_reac_2023q1
-# - faers_reac_2023q2
-# - faers_reac_2023q3
-# - faers_reac_2023q4
-# - medicare_part_d_2023
+# - Raw Table - faers_demo_2023q1
+# - Raw Table - faers_demo_2023q2
+# - Raw Table - faers_demo_2023q3
+# - Raw Table - faers_demo_2023q4
+# - Raw Table - faers_drug_2023q1
+# - Raw Table - faers_drug_2023q2
+# - Raw Table - faers_drug_2023q3
+# - Raw Table - faers_drug_2023q4
+# - Raw Table - faers_indi_2023q1
+# - Raw Table - faers_indi_2023q2
+# - Raw Table - faers_indi_2023q3
+# - Raw Table - faers_indi_2023q4
+# - Raw Table - faers_outc_2023q1
+# - Raw Table - faers_outc_2023q2
+# - Raw Table - faers_outc_2023q3
+# - Raw Table - faers_outc_2023q4
+# - Raw Table - faers_reac_2023q1
+# - Raw Table - faers_reac_2023q2
+# - Raw Table - faers_reac_2023q3
+# - Raw Table - faers_reac_2023q4
+# - Raw Table - medicare_part_d_2023
 
-#  After steps 0 through 5.5, run this script again and you
+#  After steps 0 through 8b, run this script again and you
 # should now see the following tables added: 
-# - faers_demo_2023_latest_us
-# - faers_drug_2023_ps
-# - faers_reac_2023_keep
-# - faers_outc_2023_flags
-# - faers_indi_2023_keep
+# - Cleaned Table - faers_demo_2023_latest_us
+# - Cleaned Table - faers_drug_2023_ps
+# - Cleaned Table - faers_reac_2023_keep
+# - Cleaned Table - faers_outc_2023_flags
+# - Cleaned Table - faers_indi_2023_keep

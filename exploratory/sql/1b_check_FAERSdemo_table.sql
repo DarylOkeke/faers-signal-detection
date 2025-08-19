@@ -7,7 +7,7 @@
 SELECT COUNT(*) AS n_rows FROM faers_demo_2023_latest_us;
 
 -- 2) Distinct CASEIDs vs PRIMARYIDs
--- Expectation: Usually 1:1 after dedup, but PRIMARYID is the join key
+-- Expectation: 1:1 after dedup, but PRIMARYID is the join key
 SELECT 
   COUNT(DISTINCT caseid)    AS n_caseids,
   COUNT(DISTINCT primaryid) AS n_primaryids

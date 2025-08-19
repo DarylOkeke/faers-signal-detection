@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS faers_drug_2023_ps;
 CREATE TABLE faers_drug_2023_ps AS
 SELECT
   d.primaryid,                                   -- join back to demo/reac/outc/indi
-  d.drug_seq,                                    -- needed to tie indications to this specific drug
+  d.drug_seq,                                   -- needed to tie indications to this specific drug
+  d.route,                                     -- route of administration
   UPPER(TRIM(COALESCE(d.role_cod,''))) AS role_cod,
   /* Keep raw names for debugging/audits */
   UPPER(TRIM(d.drugname))  AS drugname_raw,
