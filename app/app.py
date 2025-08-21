@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 # ==============================
 # CONFIG
 # ==============================
-ANYDRUG_SOURCE = "data/anydrug_2023.parquet"  # Parquet snapshot created by export_to_parquet.py
+ANYDRUG_SOURCE = "data/app.parquet"  # Parquet snapshot created by export_to_parquet.py
 PRR_CAP = 1000.0
 
 # Guardrails (fixed; non-tunable to keep scope tight)
@@ -22,7 +22,7 @@ MIN_ELIGIBLE_PTS = 15  # a drug must have at least this many PT rows passing gua
 SAFE_N_MIN = 5         # a must be >= 5 when we pre-validate
 MAX_DISPLAY_ROWS = 60  # cap rows shown/plotted for speed & legibility
 
-st.set_page_config(page_title="FAERS Signal Detection (2023)", layout="wide")
+st.set_page_config(page_title="FAERS Data Signal Detection (2023)", layout="wide")
 
 # ==============================
 # DB HELPERS (DuckDB + Parquet)
@@ -311,7 +311,7 @@ def plot_forest(df: pd.DataFrame, prr_min: float, title: str):
 # ==============================
 # UI ROUTING + SIDEBAR (single source of truth)
 # ==============================
-st.title("FAERS Signal Detection — 2023 (Validated Scope, DuckDB)")
+st.title("FAERS Signal Detection")
 
 # Keep the nav itself in the sidebar
 page = st.sidebar.radio("Navigation", ["Overview", "Analysis"], index=1, key="nav")
