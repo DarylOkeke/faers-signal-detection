@@ -1,0 +1,8 @@
+/bin/sh: 1: .venv/bin/python: not found
+Python: not installed
+/bin/sh: 1: .venv/bin/pip: not found
+Pip: not installed
+Streamlit import: /bin/sh: 1: .venv/bin/python: not found
+missing
+NumPy import: /bin/sh: 1: .venv/bin/python: not found
+missing

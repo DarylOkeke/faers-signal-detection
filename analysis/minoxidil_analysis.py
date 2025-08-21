@@ -1,21 +1,17 @@
 #!/usr/bin/env python3
+"""Generate the combined bar chart and PRR forest plot for the minoxidil cardiac-endpoint analysis.
+The script reads precomputed signal metrics and saves a publication-ready figure at results/figures/cardiac_combined_plot.png.
 """
-Cardiac Endpoints: Case Counts (left) + PRR Forest Plot (right)
-
-Changes vs your prior version:
-- Panel titles positioned: A shifted left, B shifted right.
-- Forest plot labels show PRR (formatted) on each marker (no N labels).
-- Tighter visual spacing: reduced subplot wspace and smarter x-limits
-  (caps extreme UCLs via 95th percentile so points cluster better).
-"""
-
-import os
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INPUT = ROOT / "results/tables/cardiac_complete.csv"
+DEFAULT_COMBINED_OUTPUT = ROOT / "results/figures/cardiac_combined_plot.png"
 
 # Set professional styling
 plt.style.use('default')
@@ -323,17 +319,20 @@ def create_combined_plot(
 def main():
     import argparse
     p = argparse.ArgumentParser(description="Generate combined bar + forest plots for cardiac endpoints")
-    p.add_argument('--input', '-i', default='cardiac_complete.csv', help='Input CSV path')
-    p.add_argument('--combined-output', '-c', default='results/figures/cardiac_combined_plot.png', help='Output PNG path')
+    p.add_argument('--input', '-i', default=DEFAULT_INPUT, help='Input CSV path')
+    p.add_argument('--combined-output', '-c', default=DEFAULT_COMBINED_OUTPUT, help='Output PNG path')
     p.add_argument('--title', '-t', default='Cardiac Endpoints: Case Counts and PRR Analysis', help='Figure title')
     p.add_argument('--center-prr-labels', action='store_true', help='Center PRR labels on markers (default True)')
     args = p.parse_args()
 
-    if not os.path.exists(args.input):
-        print(f"Error: not found: {args.input}")
+    input_path = Path(args.input)
+    output_path = Path(args.combined_output)
+
+    if not input_path.exists():
+        print(f"Error: not found: {input_path}")
         return 1
 
-    df = pd.read_csv(args.input)
+    df = pd.read_csv(input_path)
     required = {'cohort','reaction_pt','PRR','PRR_LCL','PRR_UCL','N'}
     missing = required.difference(df.columns)
     if missing:
@@ -342,7 +341,7 @@ def main():
 
     create_combined_plot(
         df,
-        output_path=args.combined_output,
+        output_path=output_path,
         title=args.title,
         center_label_on_marker=True  # you can flip to False if you want labels to the right
     )
