@@ -1,34 +1,51 @@
-# faers-signal-detection
-End-to-end adverse event signal detection pipeline using FAERS data, SQL, and Python for real-world drug safety insights.
-# FAERS Signal Detection Project
+# FAERS Signal Detection
 
-This project analyzes the FDA Adverse Event Reporting System (FAERS) data to detect post-market drug safety signals using SQL, Python, and data visualization.
+A self-contained analysis pipeline and Streamlit interface for exploring potential safety signals in the FDA Adverse Event Reporting System (FAERS).
 
-## Goals
-- Clean and ingest FAERS public data
-- Perform exploratory data analysis (EDA)
-- Calculate disproportionality metrics (PRR, ROR)
-- Visualize trends by drug, age group, and reaction type
+## Quick start
+1. **Install dependencies**
+   ```bash
+   make install
+   ```
+   This creates `.venv/` and installs all Python packages from a local `vendor/` wheel cache. If `vendor/` is absent, the command prints instructions and refers to [`OFFLINE_INSTRUCTIONS.md`](OFFLINE_INSTRUCTIONS.md).
+2. **Regenerate the minoxidil figure**
+   ```bash
+   make analysis
+   ```
+   Outputs `results/figures/cardiac_combined_plot.png` from precomputed metrics in `results/tables/cardiac_complete.csv`.
+3. **Launch the Streamlit app**
+   ```bash
+   make app
+   ```
+   Starts the interactive FAERS signal explorer (headless mode). The app expects `data/anydrug_2023.parquet`; if missing, create it with `python app/sqlite_to_parquet.py` against the source SQLite database.
 
-## Tech Stack
-- **Python**: pandas, matplotlib, seaborn, scikit-learn
-- **SQL**: SQLite + raw SQL queries
-- **Data**: FAERS ASCII quarterly reports
-- **Tools**: Jupyter/Colab, Git, VS Code
+### Additional commands
+- `make test` – run the unit tests
+- `make doctor` – report Python and key dependency versions
+- `make clean` – remove the virtual environment and caches
 
-## Project Structure
+## Repository layout
+```
+analysis/       # Plotting utilities and figure scripts
+app/            # Streamlit application
+scripts/        # Command-line entry points
+pipeline/       # Data ingestion and preprocessing
+data/           # Project datasets (see data/README.md)
+docs/           # Reference documentation
+exploratory/    # Notebooks and ad-hoc scripts
+reports/        # Project reports and logs
+results/        # Generated tables and figures
+src/            # Reusable Python modules
+tests/          # Unit tests
+Makefile        # Common tasks (install, analysis, app)
+requirements.txt
+```
 
-faers-signal-detection/
-├── data/ # Raw FAERS files (.txt/.csv)
-├── notebooks/ # Jupyter or Colab notebooks for EDA/modeling
-├── sql/ # SQL scripts and saved queries
-├── scripts/ # Python scripts for ingestion, analysis, and metrics
-├── outputs/ # Final results: plots, CSVs, tables for dashboard/report
+## Development
+Run tests before committing changes:
+```bash
+make test
+```
 
-### Background Check EXAMPLE:
-- **PubMed Search:** “Drug X” + “FAERS” + “hepatotoxicity” → 0 direct hits on PRR analyses.
-- **FDA Warnings:** No safety communication issued for hepatotoxicity as of April 2025.
-- **ClinicalTrials.gov:** Ongoing trials focus on efficacy, not post‐marketing AEs.
-
-## Status
-Early-stage: Building ingestion & signal detection engine.
+## License
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
