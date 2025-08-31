@@ -1,34 +1,119 @@
-# faers-signal-detection
-End-to-end adverse event signal detection pipeline using FAERS data, SQL, and Python for real-world drug safety insights.
-# FAERS Signal Detection Project
+# FAERS Signal Detection
 
-This project analyzes the FDA Adverse Event Reporting System (FAERS) data to detect post-market drug safety signals using SQL, Python, and data visualization.
+A self-contained analysis pipeline and Streamlit ## Additional commands
+- `make pipeline` – run the complete analysis pipeline (views → summary → figures)
+- `make analysis` – generate minoxidil case study figure only  
+- `make test` – run the unit tests
+- `make doctor` – report Python and dependency versions
+- `make clean` – remove the virtual environment and cachesrface for exploring potential safety signals in the FDA Adverse Event Reporting System (FAERS).
 
-## Goals
-- Clean and ingest FAERS public data
-- Perform exploratory data analysis (EDA)
-- Calculate disproportionality metrics (PRR, ROR)
-- Visualize trends by drug, age group, and reaction type
 
-## Tech Stack
-- **Python**: pandas, matplotlib, seaborn, scikit-learn
-- **SQL**: SQLite + raw SQL queries
-- **Data**: FAERS ASCII quarterly reports
-- **Tools**: Jupyter/Colab, Git, VS Code
+## Reproducibility: Step-by-step for a Fresh Clone
 
-## Project Structure
+Follow these steps to fully reproduce the summary tables, minoxidil case study figures, and launch the Streamlit app—even on a new machine or after a fresh clone.
 
-faers-signal-detection/
-├── data/ # Raw FAERS files (.txt/.csv)
-├── notebooks/ # Jupyter or Colab notebooks for EDA/modeling
-├── sql/ # SQL scripts and saved queries
-├── scripts/ # Python scripts for ingestion, analysis, and metrics
-├── outputs/ # Final results: plots, CSVs, tables for dashboard/report
+### 1. Clone the repository
+```bash
+git clone https://github.com/DarylOkeke/faers-signal-detection.git
+cd faers-signal-detection/faers-signal-detection
+```
 
-### Background Check EXAMPLE:
-- **PubMed Search:** “Drug X” + “FAERS” + “hepatotoxicity” → 0 direct hits on PRR analyses.
-- **FDA Warnings:** No safety communication issued for hepatotoxicity as of April 2025.
-- **ClinicalTrials.gov:** Ongoing trials focus on efficacy, not post‐marketing AEs.
+### 2. Set up the Python environment and dependencies
+```bash
+make install
+```
+This creates a `.venv/` and installs all required packages from `requirements.txt` (using `vendor/` for offline installs if present).
 
-## Status
-Early-stage: Building ingestion & signal detection engine.
+**Windows users without `make`:** Run these commands manually:
+```cmd
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install --upgrade pip
+.venv\Scripts\pip.exe install --no-index --find-links vendor -r requirements.txt
+```
+
+### 3. Prepare the data
+
+- **Required:** `data/faers+medicare.duckdb` (main database) and `data/anydrug_2023.parquet` (for the app).
+- If these files are missing, see [`OFFLINE_INSTRUCTIONS.md`](OFFLINE_INSTRUCTIONS.md) and `data/README.md` for how to generate or obtain them.
+- **Note:** `data/anydrug_2023.parquet` is already included in the repository. Only regenerate it if needed:
+  ```bash
+  python app/sqlite_to_parquet.py
+  ```
+
+### 4. Run the full analysis pipeline
+
+**Option A: Use the automated pipeline (recommended):**
+```bash
+make pipeline
+```
+This runs all steps below automatically.
+
+**Option B: Run individual steps:**
+
+**A. Set up database views:**
+```bash
+python -m pipeline.01_create_views
+```
+
+**B. Compute summary statistics and export CSV:**
+```bash
+python -m pipeline.02_compute_summary --db data/faers+medicare.duckdb --out results/tables/cardiac_complete.csv
+```
+
+**C. Filter and format the summary for minoxidil endpoints:**
+```bash
+python -m pipeline.03_make_trimmed_tables --input results/tables/cardiac_complete.csv --output results/tables/minoxidil_trimmed.csv
+```
+
+**D. Generate the minoxidil case study figure:**
+```bash
+python -m analysis.minoxidil_analysis --input results/tables/cardiac_complete.csv --combined-output results/figures/cardiac_combined_plot.png
+```
+
+### 5. Launch the Streamlit app
+```bash
+make app
+# or
+streamlit run app/app.py
+```
+The app expects `data/anydrug_2023.parquet` to exist (already included).
+
+### 6. (Optional) Run tests and check environment
+```bash
+make test      # Run unit tests
+make doctor    # Show Python and dependency versions
+make clean     # Remove .venv and caches
+```
+
+---
+
+## Additional commands
+- `make test` – run the unit tests
+- `make doctor` – report Python and key dependency versions
+- `make clean` – remove the virtual environment and caches
+
+## Repository layout
+```
+analysis/       # Plotting utilities and figure scripts
+app/            # Streamlit application
+scripts/        # Command-line entry points
+pipeline/       # Data ingestion and preprocessing
+data/           # Project datasets (see data/README.md)
+docs/           # Reference documentation
+exploratory/    # Notebooks and ad-hoc scripts
+reports/        # Project reports and logs
+results/        # Generated tables and figures
+src/            # Reusable Python modules
+tests/          # Unit tests
+Makefile        # Common tasks (install, analysis, app)
+requirements.txt
+```
+
+## Development
+Run tests before committing changes:
+```bash
+make test
+```
+
+## License
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.

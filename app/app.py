@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 # ==============================
 # CONFIG
 # ==============================
-ANYDRUG_SOURCE = "data/app.parquet"  # Parquet snapshot created by export_to_parquet.py
+ANYDRUG_SOURCE = "data/anydrug_2023.parquet"  # Parquet snapshot created by sqlite_to_parquet.py
 PRR_CAP = 1000.0
 
 # Guardrails (fixed; non-tunable to keep scope tight)

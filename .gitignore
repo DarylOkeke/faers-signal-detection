@@ -11,12 +11,14 @@ data/*.pdf
 data/*.xlsx
 
 # Database files
-* .db
+*.db
+*.duckdb
 *.db-shm
 *.db-wal
 *.db-journal
 faers.db
 faers+medicare.db
+faers+medicare.duckdb
 
 # Python
 __pycache__/
@@ -46,4 +48,5 @@ Thumbs.db
 
 # Project specific
 trashcan/
+
 

@@ -1,0 +1,5 @@
+cohort,reaction_pt,N,PRR,PRR_LCL,PRR_UCL,chi2,flagged,decision,interpretation
+MINOXIDIL_SYSTEMIC,CARDIAC TAMPONADE,0.0,0.0,0.0,0.0,0.0,False,Fail to reject H0,"MINOXIDIL_SYSTEMIC: No disproportionate reporting for CARDIAC TAMPONADE (PRR=0.0, N=0)"
+MINOXIDIL_SYSTEMIC,PERICARDIAL EFFUSION,0.0,0.0,0.0,0.0,0.0,False,Fail to reject H0,"MINOXIDIL_SYSTEMIC: No disproportionate reporting for PERICARDIAL EFFUSION (PRR=0.0, N=0)"
+MINOXIDIL_SYSTEMIC,PERICARDITIS,0.0,0.0,0.0,0.0,0.0,False,Fail to reject H0,"MINOXIDIL_SYSTEMIC: No disproportionate reporting for PERICARDITIS (PRR=0.0, N=0)"
+MINOXIDIL_SYSTEMIC,PLEURAL EFFUSION,0.0,0.0,0.0,0.0,0.0,False,Fail to reject H0,"MINOXIDIL_SYSTEMIC: No disproportionate reporting for PLEURAL EFFUSION (PRR=0.0, N=0)"

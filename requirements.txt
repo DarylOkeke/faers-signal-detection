@@ -2,12 +2,12 @@
 pandas
 numpy
 matplotlib
+seaborn
 tabulate
 
 ## Needed for Streamlit app
-io
 streamlit
-StringIO
+duckdb
 plotly
 
 # Optional: Jupyter and development tools
