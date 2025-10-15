@@ -260,5 +260,5 @@ Here’s a continuation of your **Analysis Log**, picking up at **2025-08-15** a
 
 ---
 
-✅ **Project milestone reached:** Analysis pipeline complete, validated, visualized, and wrapped in a working Streamlit application.
+**Project milestone reached:** Analysis pipeline complete, validated, visualized, and wrapped in a working Streamlit application.
 
