@@ -71,7 +71,7 @@
 * χ² ≥ 4
 * N ≥ 3
 
-⚠️ **Caveat:** FAERS ≠ incidence; signal ≠ causation.
+**Caveat:** FAERS ≠ incidence; signal ≠ causation.
 
 ---
 
