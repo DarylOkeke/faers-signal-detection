@@ -148,9 +148,5 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 
 ---
 
-**Generated:** August 20, 2025
-**Created By:** Daryl Okeke
-**Repository:** `faers-signal-detection`
-
 *This analysis is for research purposes only. Clinical decision-making should not rely solely on FAERS disproportionality analysis.*
 
