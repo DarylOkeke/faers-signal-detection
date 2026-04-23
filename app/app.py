@@ -2,6 +2,7 @@
 import duckdb
 from io import StringIO
 from datetime import datetime
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -11,15 +12,16 @@ import plotly.graph_objects as go
 # ==============================
 # CONFIG
 # ==============================
-ANYDRUG_SOURCE = "data/anydrug_2023.parquet"  # Parquet snapshot created by sqlite_to_parquet.py
+BASE_DIR = Path(__file__).resolve().parent.parent  # project root
+ANYDRUG_SOURCE = (BASE_DIR / "data" / "anydrug_2023.parquet").as_posix()  # Parquet snapshot created by sqlite_to_parquet.py
 PRR_CAP = 1000.0
 
-# Guardrails (fixed; non-tunable to keep scope tight)
-EXP_MIN = 5         # all four expected counts must be >= 5
-BG_MIN = 2000       # c+d must be large enough to avoid denominator spikes
-TABLE_MIN = 10000   # a+b+c+d must be sizable
-MIN_ELIGIBLE_PTS = 15  # a drug must have at least this many PT rows passing guardrails to appear
-SAFE_N_MIN = 5         # a must be >= 5 when we pre-validate
+# Guardrails tuned for single-year FAERS snapshots (still conservative; keep scope tight)
+TABLE_MIN = 1200       # retuned downward again so annual data yields many eligible drugs but still sizable tables
+BG_MIN = 500           # c+d must be sizable enough to stabilize denominators
+EXP_MIN = 3.0          # all four expected counts must be >= 3.0 to avoid tiny cells while admitting more volume
+MIN_ELIGIBLE_PTS = 6   # a drug must have at least this many PT rows passing guardrails to appear
+SAFE_N_MIN = 3         # a must be >= 3 when we pre-validate (still filters out singletons)
 MAX_DISPLAY_ROWS = 60  # cap rows shown/plotted for speed & legibility
 
 st.set_page_config(page_title="FAERS Data Signal Detection (2023)", layout="wide")
