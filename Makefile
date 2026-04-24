@@ -1,12 +1,12 @@
 # Makefile - cross-platform compatible
 VENV := .venv
 ifeq ($(OS),Windows_NT)
-    PY := $(VENV)\Scripts\python.exe
+    PY := $(VENV)\Scripts\python.exe -X utf8
     PIP := $(VENV)\Scripts\pip.exe
     RM := rmdir /s /q
     MKDIR := mkdir
 else
-    PY := $(VENV)/bin/python
+    PY := $(VENV)/bin/python -X utf8
     PIP := $(VENV)/bin/pip
     RM := rm -rf
     MKDIR := mkdir -p
@@ -23,7 +23,7 @@ pipeline: install
 	$(PY) -m pipeline.02_compute_summary --db data/faers+medicare.duckdb --out results/tables/cardiac_complete.csv
 	$(PY) -m pipeline.03_make_trimmed_tables --input results/tables/cardiac_complete.csv --output results/tables/minoxidil_trimmed.csv
 	$(PY) -m $(ANALYSIS_MODULE)
-	@echo "✓ Full pipeline completed successfully!"
+	@echo "[OK] Full pipeline completed successfully!"
 
 ifeq ($(OS),Windows_NT)
 $(VENV)\Scripts\activate: requirements.txt

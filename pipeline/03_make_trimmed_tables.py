@@ -50,15 +50,19 @@ def ensure_complete_matrix(df, include_topical=False, include_hydralazine=False)
     df_indexed = df.set_index(['cohort','reaction_pt'])
     complete_df = df_indexed.reindex(complete_index)
 
-    fill_values = {
+    numeric_fills = {
         'a': 0, 'b': 0, 'c': 0, 'd': 0, 'N': 0,
         'PRR': 0.0, 'PRR_LCL': 0.0, 'PRR_UCL': 0.0,
         'ROR': 0.0, 'ROR_LCL': 0.0, 'ROR_UCL': 0.0,
-        'chi2': 0.0, 'flagged': False
+        'chi2': 0.0,
     }
-    for col, val in fill_values.items():
+    for col, val in numeric_fills.items():
         if col in complete_df.columns:
-            complete_df[col] = complete_df[col].fillna(val)
+            complete_df[col] = pd.to_numeric(complete_df[col], errors='coerce').fillna(val)
+    if 'flagged' in complete_df.columns:
+        missing = complete_df['flagged'].isna()
+        complete_df.loc[missing, 'flagged'] = False
+        complete_df['flagged'] = complete_df['flagged'].astype(bool)
 
     complete_df = complete_df.reset_index()
     print(f"✓ Ensured complete matrix: {len(complete_df)} rows")

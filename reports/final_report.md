@@ -64,16 +64,18 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 
 ### Executive Summary
 
-* **Hydralazine** demonstrated the **strongest cardiac safety signals**, especially for tamponade and pericardial effusion.
-* **Systemic Minoxidil** showed **moderate but significant signals**.
-* **Topical Minoxidil** showed **no cardiac signals** (all N=0).
+* **Systemic Minoxidil** demonstrated the **strongest disproportionality signals** for cardiac endpoints in 2023 FAERS, meeting all three pre-specified thresholds for cardiac tamponade, pericardial effusion, and pleural effusion.
+* **Hydralazine** showed a signal for pericardial effusion (PRR=30.7, N=3), consistent with its known association with drug-induced pericardial disease, but not for cardiac tamponade in this dataset.
+* **Topical Minoxidil** showed **no cardiac signals** (all N=0), consistent with low systemic absorption.
 
 ### High-Priority Findings
 
-* Hydralazine + Cardiac Tamponade → PRR = 165.8 (95% CI: 73.1–375.7)
-* Hydralazine + Pericardial Effusion → PRR = 51.0 (95% CI: 28.4–91.8)
-* Minoxidil Systemic + Cardiac Tamponade → PRR = 49.2 (95% CI: 18.2–133.5)
-* Minoxidil Systemic + Pericardial Effusion → PRR = 12.5 (95% CI: 5.6–27.9)
+* Minoxidil Systemic + Cardiac Tamponade → PRR = 379.3 (95% CI: 129.5–1111.2, N=3)
+* Minoxidil Systemic + Pericardial Effusion → PRR = 114.3 (95% CI: 51.9–252.0, N=5)
+* Minoxidil Systemic + Pleural Effusion → PRR = 26.9 (95% CI: 9.3–78.2, N=3)
+* Hydralazine + Pericardial Effusion → PRR = 30.7 (95% CI: 10.2–92.5, N=3)
+
+Note: N counts are small for all endpoints. Wide confidence intervals reflect this uncertainty. The PRR for cardiac tamponade is very high partly because this endpoint is rare in the overall 2023 FAERS background (175 total cases across 565K reports).
 
 ### Complete Results Table
 
@@ -107,13 +109,13 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 
 ## 5. Signal Summary
 
-| Drug               | Signal Strength | Key Observations                  | Notes                                              |
-| ------------------ | --------------- | --------------------------------- | -------------------------------------------------- |
-| Hydralazine        | High            | Tamponade, pericardial effusion   | Large PRR; consistent with labeled lupus risk      |
-| Minoxidil Systemic | Moderate        | Tamponade, pericardial effusion   | Meets pre-specified thresholds; hypothesis-generating |
-| Minoxidil Topical  | Not detected    | None observed in 2023 FAERS       | Consistent with low systemic absorption            |
+| Drug               | Signal Strength | Key Observations                      | Notes                                                  |
+| ------------------ | --------------- | ------------------------------------- | ------------------------------------------------------ |
+| Minoxidil Systemic | High            | Tamponade (PRR=379, N=3), effusion    | Large PRR; wide CI due to small N; meets all thresholds |
+| Hydralazine        | Moderate        | Pericardial effusion (PRR=31, N=3)    | Consistent with labeled lupus/pericardial risk          |
+| Minoxidil Topical  | Not detected    | None observed in 2023 FAERS           | Consistent with low systemic absorption                 |
 
-*Signal strength refers to disproportionality ratio magnitude, not clinical risk. These findings do not support clinical recommendations on their own.*
+*Signal strength refers to disproportionality ratio magnitude, not clinical risk. N values are small; interpret with caution. These findings do not support clinical recommendations on their own.*
 
 ---
 

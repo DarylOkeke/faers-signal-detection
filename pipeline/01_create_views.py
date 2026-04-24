@@ -2,16 +2,15 @@
 """
 FAERS Database Setup for Signal Detection (DuckDB)
 
-Creates the views used by the analysis & Streamlit app:
-- v_events_2023_route_flags  (route normalization + flags)
-- v_events_2023_cohorts      (cohort assignment incl. OTHER)
-- v_signal_2x2_2023          (cohort × PT 2x2s)
-- v_anydrug_signal_2x2_2023  (ingredient × PT 2x2s, PS only)
-- v_all_drugs_2023           (helper: list of all ingredients)
-- v_all_pts_2023             (helper: list of all PTs)
-
-Author: FAERS Signal Detection Team
-Date: August 2025
+Creates the unified events table and views used by the analysis pipeline
+and Streamlit app:
+- faers_events_2023_unique   (unified Q1-Q4 drug × reaction rows, PS filtered)
+- v_events_2023_route_flags  (route normalization + boolean flags)
+- v_events_2023_cohorts      (cohort assignment: MINOXIDIL_SYSTEMIC, MINOXIDIL_TOPICAL, HYDRALAZINE, OTHER)
+- v_signal_2x2_2023          (cohort × PT 2x2 contingency table)
+- v_anydrug_signal_2x2_2023  (ingredient × PT 2x2s, primary suspect only)
+- v_all_drugs_2023           (helper: distinct ingredient list for Streamlit)
+- v_all_pts_2023             (helper: distinct PT list for Streamlit)
 """
 
 import os
@@ -22,27 +21,60 @@ import pandas as pd
 DB_PATH = "data/faers+medicare.duckdb"
 
 def create_faers_events_2023_unique(conn):
-    """Create unified FAERS events table from Q1 2023 raw tables."""
-    print("Creating faers_events_2023_unique...")
+    """
+    Build unified drug × reaction table from all four 2023 FAERS quarters.
+
+    Each row is one (case, drug, reaction) triple. A single FAERS case can
+    appear multiple times across quarters if the reporter submitted an updated
+    version. Full deduplication by CASEID/CASEVERSION is not performed here;
+    downstream views apply role-code and US-only filters that further narrow
+    the working set.
+    """
+    print("Creating faers_events_2023_unique (Q1–Q4 2023)...")
     conn.execute("DROP TABLE IF EXISTS faers_events_2023_unique")
     sql = """
     CREATE TABLE faers_events_2023_unique AS
-    SELECT
-        demo.primaryid,
-        demo.caseid,
-        '2023' AS year,
-        'Q1' AS quarter,
-        UPPER(TRIM(drug.drugname)) AS ingredient_std,
-        drug.role_cod,
-        drug.route,
-        reac.pt AS reaction_pt
+
+    SELECT demo.primaryid, demo.caseid, '2023' AS year, 'Q1' AS quarter,
+           UPPER(TRIM(drug.drugname)) AS ingredient_std,
+           drug.role_cod, drug.route, reac.pt AS reaction_pt
     FROM faers_demo_2023q1 demo
     LEFT JOIN faers_drug_2023q1 drug ON demo.primaryid = drug.primaryid
     LEFT JOIN faers_reac_2023q1 reac ON demo.primaryid = reac.primaryid
+    WHERE drug.role_cod IS NOT NULL AND reac.pt IS NOT NULL
+
+    UNION ALL
+
+    SELECT demo.primaryid, demo.caseid, '2023' AS year, 'Q2' AS quarter,
+           UPPER(TRIM(drug.drugname)) AS ingredient_std,
+           drug.role_cod, drug.route, reac.pt AS reaction_pt
+    FROM faers_demo_2023q2 demo
+    LEFT JOIN faers_drug_2023q2 drug ON demo.primaryid = drug.primaryid
+    LEFT JOIN faers_reac_2023q2 reac ON demo.primaryid = reac.primaryid
+    WHERE drug.role_cod IS NOT NULL AND reac.pt IS NOT NULL
+
+    UNION ALL
+
+    SELECT demo.primaryid, demo.caseid, '2023' AS year, 'Q3' AS quarter,
+           UPPER(TRIM(drug.drugname)) AS ingredient_std,
+           drug.role_cod, drug.route, reac.pt AS reaction_pt
+    FROM faers_demo_2023q3 demo
+    LEFT JOIN faers_drug_2023q3 drug ON demo.primaryid = drug.primaryid
+    LEFT JOIN faers_reac_2023q3 reac ON demo.primaryid = reac.primaryid
+    WHERE drug.role_cod IS NOT NULL AND reac.pt IS NOT NULL
+
+    UNION ALL
+
+    SELECT demo.primaryid, demo.caseid, '2023' AS year, 'Q4' AS quarter,
+           UPPER(TRIM(drug.drugname)) AS ingredient_std,
+           drug.role_cod, drug.route, reac.pt AS reaction_pt
+    FROM faers_demo_2023q4 demo
+    LEFT JOIN faers_drug_2023q4 drug ON demo.primaryid = drug.primaryid
+    LEFT JOIN faers_reac_2023q4 reac ON demo.primaryid = reac.primaryid
     WHERE drug.role_cod IS NOT NULL AND reac.pt IS NOT NULL;
     """
     conn.execute(sql)
-    print("✓ faers_events_2023_unique created")
+    print("✓ faers_events_2023_unique created (Q1–Q4)")
 
 def create_route_flags_view(conn):
     """Create route normalization view with boolean flags."""
