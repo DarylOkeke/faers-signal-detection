@@ -77,38 +77,43 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 
 ### Complete Results Table
 
-*(See table in your draft — retained with formatting)*
+*(See `results/tables/cardiac_complete.csv` for full signal metrics across all cohorts and endpoints.)*
 
 ---
 
-## 4. Clinical Interpretation
+## 4. Interpretation of Disproportionality Findings
+
+*Note: All interpretations below are limited to the strength of the FAERS signal. Disproportionality analysis cannot establish causation, true incidence, or population-level risk.*
 
 ### Hydralazine
 
-* **Very high signal strength** for tamponade and effusion.
-* Likely mediated through **drug-induced lupus/pericarditis** mechanism.
-* **Implication:** Strong evidence for causal association; monitoring essential.
+* **Very high disproportionality** for tamponade and pericardial effusion (PRR > 100).
+* Consistent with the established mechanism of drug-induced lupus erythematosus and pericardial disease associated with hydralazine — a labeled risk documented in prior literature.
+* **Interpretation:** The disproportionality ratio is large and the association is biologically plausible given known pharmacology. This is consistent with, but does not independently confirm, a causal relationship. The signal magnitude warrants continued pharmacovigilance attention.
 
-### Minoxidil Systemic
+### Minoxidil (Systemic)
 
-* Moderate signals for tamponade and effusion.
-* Likely related to **fluid retention and hemodynamic stress**.
-* **Implication:** Use requires **cardiac monitoring**, especially in at-risk patients.
+* Moderate disproportionality for tamponade and pericardial effusion.
+* Consistent with fluid retention and hemodynamic effects expected from a potent oral vasodilator.
+* **Interpretation:** The signal meets all three pre-specified flagging thresholds and is biologically plausible. This is a hypothesis-generating finding. Clinical monitoring decisions should not be based on FAERS disproportionality data alone.
 
-### Minoxidil Topical
+### Minoxidil (Topical)
 
-* No cardiac adverse events reported in 2023 FAERS.
-* **Implication:** Appears safe with standard monitoring.
+* No qualifying cardiac adverse events observed in 2023 FAERS across the four pre-specified endpoints.
+* Consistent with low systemic absorption from topical formulations.
+* **Interpretation:** Absence of FAERS reports is not proof of safety. However, the null result is consistent with the expected pharmacological profile of topical minoxidil at standard doses.
 
 ---
 
-## 5. Risk Assessment Summary
+## 5. Signal Summary
 
-| Drug               | Risk Level   | Key Concerns                    | Clinical Recommendation                    |
-| ------------------ | ------------ | ------------------------------- | ------------------------------------------ |
-| Hydralazine        | 🔴 Very High | Tamponade, Pericardial effusion | Enhanced monitoring, consider alternatives |
-| Minoxidil Systemic | 🟡 Moderate  | Tamponade, Pericardial effusion | Cardiac monitoring during therapy          |
-| Minoxidil Topical  | 🟢 Low       | None detected                   | Standard care adequate                     |
+| Drug               | Signal Strength | Key Observations                  | Notes                                              |
+| ------------------ | --------------- | --------------------------------- | -------------------------------------------------- |
+| Hydralazine        | High            | Tamponade, pericardial effusion   | Large PRR; consistent with labeled lupus risk      |
+| Minoxidil Systemic | Moderate        | Tamponade, pericardial effusion   | Meets pre-specified thresholds; hypothesis-generating |
+| Minoxidil Topical  | Not detected    | None observed in 2023 FAERS       | Consistent with low systemic absorption            |
+
+*Signal strength refers to disproportionality ratio magnitude, not clinical risk. These findings do not support clinical recommendations on their own.*
 
 ---
 
@@ -131,10 +136,10 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 
 ## 8. Conclusions
 
-* **Hydralazine** demonstrates **clear, strong safety signals** for life-threatening cardiac complications.
-* **Systemic Minoxidil** shows **moderate but concerning associations** with similar endpoints.
-* **Topical Minoxidil** appears safe at the cardiac level.
-* Clinical vigilance is warranted, particularly with Hydralazine.
+* **Hydralazine** shows the largest disproportionality ratios among the three cohorts, consistent with its established association with drug-induced pericardial disease in the literature.
+* **Systemic minoxidil** meets all three pre-specified signal detection thresholds for two cardiac endpoints, consistent with its hemodynamic and fluid-retention pharmacology.
+* **Topical minoxidil** produced no qualifying signals in 2023 FAERS, consistent with low systemic absorption at standard doses.
+* All findings are exploratory and hypothesis-generating. They should not be used as the sole basis for clinical recommendations. Confirmation would require epidemiological designs with exposure denominators and appropriate confounding control.
 
 ---
 
@@ -144,7 +149,7 @@ Hydralazine was included both as a drug of interest and as a comparator due to i
 * **Figures:** Bar + forest plots.
 * **Streamlit App (`app.py`)**: Allows dynamic exploration of FAERS signals across all cohorts and endpoints.
 * **Validation tests:** Controls confirm pipeline reproducibility.
-* **Full repo structure:** Scripts (`scripts/`), core modules (`src/`), tests (`tests/`), outputs (`outputs/`), and app (`app/`).
+* **Full repo structure:** Scripts (`scripts/`), core modules (`src/`), tests (`tests/`), outputs (`results/`), and app (`app/`).
 
 ---
 

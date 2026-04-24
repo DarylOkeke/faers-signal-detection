@@ -1,11 +1,11 @@
-# faers_core/stats.py
+# src/stats.py
 """
-FAERS Signal Detection Statistics Core
-Shared by both CLI summary and Streamlit app.
+Core statistics for FAERS disproportionality analysis.
+Provides PRR, ROR, and chi-square with Haldane-Anscombe correction.
+Used by the pipeline summary step and the Streamlit app.
 """
 
 import math
-import numpy as np
 import pandas as pd
 
 

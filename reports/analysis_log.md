@@ -125,10 +125,8 @@
   * The new, cleaned dataset will produce AE rates that are reproducible
   
   * Next up - Finish cleaning data, then will use pandas to analyze it. Not yet sure how I want to frame my hypothesis. Also I need to document the outputs from my new SQL queries
-Here’s a continuation of your **Analysis Log**, picking up at **2025-08-15** and running daily through **2025-08-20**, covering all the work we did together (summary stats, trimming, hydralazine comparator, validation, tests, and the final Streamlit app):
 
 ---
-
 
 ## 2025-08-15
 

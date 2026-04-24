@@ -1,16 +1,16 @@
-# Core dependencies for FAERS signal detection
+# Core dependencies
 pandas
 numpy
 matplotlib
 seaborn
 tabulate
 
-## Needed for Streamlit app
+# Streamlit app
 streamlit
 duckdb
 plotly
 
-# Optional: Jupyter and development tools
+# Development and exploration
 jupyterlab
 notebook
 ipython
