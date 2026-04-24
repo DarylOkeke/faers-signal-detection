@@ -149,7 +149,7 @@ Note: N counts are small for all endpoints. Wide confidence intervals reflect th
 
 * **Trimmed cardiac endpoint tables** (CSV + Markdown).
 * **Figures:** Bar + forest plots.
-* **Streamlit App (`app.py`)**: Allows dynamic exploration of FAERS signals across all cohorts and endpoints.
+* **Streamlit App (`app.py`)**: Interactive single-ingredient signal explorer for 2023 FAERS. Displays PRR, ROR, χ², and forest plots for any ingredient with sufficient reporting volume (≥ ~500–1000 primary-suspect cases). Drugs with very few reports — including MINOXIDIL — are excluded by design, as the statistics would be unreliable at small denominators. The MINOXIDIL and HYDRALAZINE analyses above use the cohort-based pipeline, not the Streamlit app.
 * **Validation tests:** Controls confirm pipeline reproducibility.
 * **Full repo structure:** Scripts (`scripts/`), core modules (`src/`), tests (`tests/`), outputs (`results/`), and app (`app/`).
 

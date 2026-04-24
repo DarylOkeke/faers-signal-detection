@@ -329,6 +329,7 @@ We intentionally keep a **small, conservative scope** so results are **fast** an
 - **Screening, not causality**: Disproportionality highlights **signals** worth follow-up; it does **not** prove risk or incidence.
 - **Reporting bias & confounding**: FAERS is spontaneous; counts reflect **reports**, not exposure.
 - **Conservative defaults**: We may miss rare-but-real signals; that’s intentional for a precise demo.
+- **Minimum reporting volume**: Only drugs with enough primary-suspect cases to satisfy expected-cell-count requirements appear in the drug picker. Drugs with very few FAERS reports (roughly < 500 primary-suspect cases) are excluded because disproportionality statistics become unreliable at small denominators.
 """)
     st.caption(f"Source: `{ANYDRUG_SOURCE}` (Parquet snapshot of `v_anydrug_signal_2x2_2023`)")
     st.stop()  # Don’t render analysis below on Overview
