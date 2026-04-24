@@ -15,6 +15,11 @@ and Streamlit app:
 
 import os
 import sys
+
+# Ensure UTF-8 output on Windows terminals that default to cp1252
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 import duckdb
 import pandas as pd
 

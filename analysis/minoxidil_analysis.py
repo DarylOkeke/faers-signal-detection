@@ -2,12 +2,16 @@
 """Generate the combined bar chart and PRR forest plot for the minoxidil cardiac-endpoint analysis.
 The script reads precomputed signal metrics and saves a publication-ready figure at results/figures/cardiac_combined_plot.png.
 """
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "results/tables/cardiac_complete.csv"

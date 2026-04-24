@@ -12,6 +12,9 @@ import os
 import sys
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 # Target cardiac endpoints in specified order
 PT_ORDER = ['CARDIAC TAMPONADE', 'PERICARDIAL EFFUSION', 'PERICARDITIS', 'PLEURAL EFFUSION']
 

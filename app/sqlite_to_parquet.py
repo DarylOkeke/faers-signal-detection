@@ -1,7 +1,11 @@
+import sys
 import duckdb
 import pandas as pd
 import os
 from pathlib import Path
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 # Read from DuckDB and save as Parquet
 DB_PATH = "data/faers+medicare.duckdb"
